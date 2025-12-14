@@ -23,41 +23,36 @@ for i, c_1 in enumerate(data):
 
 distances.sort(key=lambda x: x[1])
 
-clusters: list[set[tuple[tuple[int, int, int], tuple[int, int, int]]]] = []
+clusters: list[set[tuple[int, int, int]]] = []
 connected = 0
 for (c_1, c_2), dist in distances:
     print(f'>> Checking {(c_1, c_2)} with distance {dist}')
     found_clusters = []
     for i, cluster in enumerate(clusters):
-        if len(cluster) > 1:
-            cluster_indexes = set.union(*[set(c) for c in cluster])
-        else:
-            cluster_indexes = set(next(iter(cluster)))
-        if c_1 in cluster_indexes and c_2 in cluster_indexes:
-            print(f'{c_1[0]} and {c_2[1]} already in cluster {cluster}')
+        if c_1 in cluster and c_2 in cluster:
+            print(f'{c_1} and {c_2} already in cluster {cluster}')
             break
-        if c_1 in cluster_indexes or c_2 in cluster_indexes:
+        if c_1 in cluster or c_2 in cluster:
             found_clusters.append(i)
             if len(found_clusters) == 2:
                 break
     if len(found_clusters) == 1:
         print(f'{(c_1, c_2)} added to cluster {clusters[found_clusters[0]]}')
-        clusters[found_clusters[0]].add((c_1, c_2))
+        clusters[found_clusters[0]] |= {c_1, c_2}
     elif len(found_clusters) == 2:
         print(f'{(c_1, c_2)} merged clusters {clusters[found_clusters[0]]} and {clusters[found_clusters[1]]}')
         clusters[found_clusters[0]].update(clusters[found_clusters[1]])
-        clusters[found_clusters[0]].add((c_1, c_2))
+        clusters[found_clusters[0]] |= {c_1, c_2}
         del clusters[found_clusters[1]]
     if len(found_clusters) == 0:
-        clusters.append({(c_1, c_2)})
+        clusters.append({c_1, c_2})
         print(f'{(c_1, c_2)} created new cluster')
     connected += 1
     if connected == 1000:
         break
 
 print(clusters)
-clusters_with_coordinates = [set.union(*[set(c) for c in cluster]) for cluster in clusters]
-cluster_sizes = sorted([len(c) for c in clusters_with_coordinates], reverse=True)
+cluster_sizes = sorted([len(c) for c in clusters], reverse=True)
 
 print(cluster_sizes[0] * cluster_sizes[1] * cluster_sizes[2])
 
