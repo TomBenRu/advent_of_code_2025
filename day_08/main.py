@@ -54,8 +54,5 @@ for (c_1, c_2), dist in distances:
 print(clusters)
 cluster_sizes = sorted([len(c) for c in clusters], reverse=True)
 
-print(cluster_sizes[0] * cluster_sizes[1] * cluster_sizes[2])
-
-
-
-
+# Part 1
+print('Solution for Part 1: ', cluster_sizes[0] * cluster_sizes[1] * cluster_sizes[2])
