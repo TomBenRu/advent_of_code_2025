@@ -166,8 +166,6 @@ def find_min_toggles_to_get_voltage(buttons: list[list[int]], voltage: list[int]
     return -1
 
 
-
-
 def find_solution(cleaned_data, part: int = 1):
     if part == 1:
         min_toggles = []
